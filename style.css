@@ -410,6 +410,7 @@ h1 {
   .tasks {
     width: 75%;
     position: relative;
+    height: 50px;
   }
 
   .tasks:active {
@@ -418,6 +419,9 @@ h1 {
 
   .create-time {
     width: 20%;
+    height: 50px;
+    padding: 10px;
+    text-align: center;
   }
 
   .counter {
