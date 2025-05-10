@@ -1,0 +1,471 @@
+html {
+  box-sizing: border-box;
+}
+*,
+::after,
+::before {
+  box-sizing: inherit;
+  margin: 0px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* flex-direction: column; */
+  height: 100vh;
+  background-color: rgb(182, 205, 231);
+}
+main {
+  width: 800px;
+  height: 500px;
+}
+.container {
+  background-color: rgb(246, 248, 250);
+  padding: 20px;
+  border-radius: 10px;
+}
+.todays-info {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 25px;
+}
+.current-time {
+  color: rgb(145, 147, 149);
+}
+.current-date {
+  color: rgb(145, 147, 149);
+}
+h2 {
+  padding-bottom: 10px;
+  color: rgb(30, 76, 129);
+}
+.calender {
+  display: flex;
+  justify-content: space-between;
+
+  background-color: rgb(234, 242, 252);
+
+  border-radius: 5px;
+}
+
+.week-days {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  font-size: larger;
+  align-items: center;
+}
+.day-of-week {
+}
+#today {
+  border: 1px solid rgb(106, 172, 248);
+  border-radius: 5px;
+}
+.date {
+}
+
+/* .new-task {
+  padding: 20px 0px;
+  display: flex;
+  justify-content: center;
+  } */
+
+.middle-box {
+  gap: 10px;
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+}
+h1 {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  /* border-bottom: 2px solid rgb(30, 76, 129); */
+  color: rgb(30, 76, 129);
+}
+.counter {
+  border: 1px solid rgb(30, 76, 129);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  width: 40%;
+}
+/* .clear {
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    background-color: rgb(30, 76, 129);
+    color: aliceblue;
+    cursor: pointer;
+    } */
+.new-task {
+  width: 40%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: rgb(30, 76, 129);
+  color: aliceblue;
+  cursor: pointer;
+}
+#small-btn {
+  display: none;
+}
+#big-btn {
+}
+.new-input {
+  border: 2px solid rgb(182, 205, 231);
+  border-radius: 5px;
+  padding: 10px;
+  margin-right: 10px;
+}
+.new-input-button {
+  border: 2px solid rgb(182, 205, 231);
+
+  border-radius: 5px;
+  padding: 10px;
+}
+/* .tasks-box {
+  background-color: rgb(177, 181, 187);
+
+  width: 700px;
+  padding: 20px;
+  position: relative;
+  bottom: 350px;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  display: flex;
+  flex-direction: column;
+} */
+.tasks-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+
+.tasks {
+  width: 80%;
+  height: 40px;
+  background-color: rgb(179, 204, 232);
+  display: inline-flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.check {
+  padding: 0px 10px;
+}
+.create-time {
+  background-color: rgb(179, 204, 232);
+  width: 15%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+.delete,
+.edit {
+  height: 40px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(30, 76, 129);
+  color: aliceblue;
+  width: 60px;
+}
+
+/* modals */
+.hidden {
+  display: none;
+}
+.modal-close {
+  font-weight: bolder;
+  font-size: 30px;
+  cursor: pointer;
+  padding-left: 10px;
+  background: none;
+  border: none;
+}
+.modal-delete,
+.modal-add,
+.modal-edit,
+.modal-new,
+.modal-change {
+  position: absolute;
+  width: auto;
+  height: auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+.modalbox {
+  padding: 10px 20px 10px 20px;
+}
+.modal-buttoms {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.modal-delete-btn,
+.modal-cancle-btn,
+.modal-ok-btn,
+.modal-ok-btn-edit,
+.input-edit,
+.input-new,
+.modal-ok-btn-add,
+.modal-edit-btn {
+  color: #fff;
+  background-color: rgb(30, 76, 129);
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  width: 80px;
+  height: 35px;
+  align-items: center;
+  cursor: pointer;
+}
+.input-edit,
+.input-new {
+  background-color: rgb(203, 219, 237);
+  color: rgb(30, 76, 129);
+  border: 2px solid rgba(149, 149, 149, 0.607);
+  height: 35px;
+  width: 200px;
+  margin-top: 20px;
+  padding-left: 5px;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(20px);
+  z-index: 5;
+  display: none;
+}
+.overlay.active {
+  display: block;
+}
+
+/* responsive */
+@media (max-width: 479px) {
+  .container {
+    width: 95vw;
+    height: 80vh;
+  }
+  .delete,
+  .edit {
+    display: none;
+  }
+  .tasks {
+    width: 75%;
+  }
+  .create-time {
+    width: 20%;
+  }
+  .counter {
+    display: none;
+  }
+  .new-task {
+    border-radius: 200px;
+    width: 58px;
+    height: 58px;
+    position: absolute;
+    top: 80%;
+    left: 78%;
+  }
+  #small-btn {
+    display: block;
+  }
+  #big-btn {
+    display: none;
+  }
+  .calender {
+    width: 100%;
+  }
+}
+
+@media (min-width: 480px) {
+  .container {
+    width: 95vw;
+    height: 80vh;
+  }
+  .delete,
+  .edit {
+    display: none;
+  }
+  .tasks-container {
+    gap: 5px;
+  }
+  .tasks {
+    width: 80%;
+  }
+  .create-time {
+    width: 20%;
+  }
+  .counter {
+    display: none;
+  }
+  .new-task {
+    height: 9%;
+  }
+  #small-btn {
+    display: none;
+  }
+  #big-btn {
+    display: block;
+  }
+  .calender {
+    width: 70%;
+    height: 10%;
+  }
+}
+@media (min-width: 576px) {
+  .container {
+    width: 95vw;
+    height: 80vh;
+  }
+  .delete,
+  .edit {
+    display: block;
+  }
+  .tasks-container {
+    gap: 5px;
+  }
+  .tasks {
+    width: 80%;
+  }
+  .create-time {
+    width: 20%;
+  }
+  .counter {
+    display: none;
+  }
+  .new-task {
+  }
+  #small-btn {
+    display: none;
+  }
+  #big-btn {
+    display: block;
+  }
+  .calender {
+    width: 70%;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 700px;
+    height: 80vh;
+  }
+  .delete,
+  .edit {
+    display: block;
+  }
+  .tasks-container {
+    gap: 10px;
+  }
+  .tasks {
+    width: 80%;
+  }
+  .create-time {
+    width: 20%;
+  }
+  .counter {
+    display: none;
+  }
+  .new-task {
+  }
+  #small-btn {
+    display: none;
+  }
+  #big-btn {
+    display: block;
+  }
+  .calender {
+    width: 70%;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 700px;
+    height: 80vh;
+  }
+  .delete,
+  .edit {
+    display: block;
+  }
+  .tasks-container {
+    gap: 10px;
+  }
+  .tasks {
+    width: 80%;
+  }
+  .create-time {
+    width: 20%;
+  }
+  .counter {
+    display: none;
+  }
+  .new-task {
+  }
+  #small-btn {
+    display: none;
+  }
+  #big-btn {
+    display: block;
+  }
+  .calender {
+    width: 70%;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 700px;
+    height: 80vh;
+  }
+  .delete,
+  .edit {
+    display: block;
+  }
+  .tasks-container {
+    gap: 10px;
+  }
+  .tasks {
+    width: 80%;
+  }
+  .create-time {
+    width: 20%;
+  }
+  .counter {
+    display: none;
+  }
+  .new-task {
+  }
+  #small-btn {
+    display: none;
+  }
+  #big-btn {
+    display: block;
+  }
+  .calender {
+    width: 70%;
+  }
+}
