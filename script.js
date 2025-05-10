@@ -28,6 +28,70 @@ taskCounter.style.color = "rgb(30, 76, 129)";
 taskCounter.style.fontWeight = "bold";
 document.querySelector(".tasks-box").after(taskCounter);
 
+// Create the mobile action modal if it doesn't exist
+function createMobileActionModal() {
+  // Check if modal already exists
+  if (!document.querySelector(".modal-mobile-actions")) {
+    const modalMobileActions = document.createElement("div");
+    modalMobileActions.className = "modal-mobile-actions hidden";
+    modalMobileActions.innerHTML = `
+      <button class="modal-close" data-target="#modal-mobile-actions">&times;</button>
+      <div class="modalbox">
+        <p class="task-name-display">Task Actions</p>
+        <div class="modal-buttoms">
+          <button class="modal-mobile-edit-btn">Edit</button>  
+          <button class="modal-mobile-delete-btn">Delete</button>
+          <button class="modal-mobile-cancel-btn">Cancel</button>
+        </div>
+      </div>
+    `;
+    document.querySelector(".container").appendChild(modalMobileActions);
+
+    // Add event listeners for the new modal buttons
+    const modalMobileEditBtn = modalMobileActions.querySelector(
+      ".modal-mobile-edit-btn"
+    );
+    const modalMobileDeleteBtn = modalMobileActions.querySelector(
+      ".modal-mobile-delete-btn"
+    );
+    const modalMobileCancelBtn = modalMobileActions.querySelector(
+      ".modal-mobile-cancel-btn"
+    );
+    const modalCloseBtn = modalMobileActions.querySelector(".modal-close");
+
+    modalMobileEditBtn.addEventListener("click", function () {
+      if (window.currentTaskToEdit) {
+        const currentText = window.currentTaskToEdit.textContent;
+        input_edit.value = currentText;
+        openModal(modal_edit);
+        input_edit.focus();
+      }
+    });
+
+    modalMobileDeleteBtn.addEventListener("click", function () {
+      if (window.currentTaskElement) {
+        window.currentTaskToDelete = window.currentTaskElement;
+        openModal(modal_delete);
+      }
+    });
+
+    modalMobileCancelBtn.addEventListener("click", function () {
+      closeAllModals();
+    });
+
+    modalCloseBtn.addEventListener("click", function () {
+      closeAllModals();
+    });
+  }
+
+  return document.querySelector(".modal-mobile-actions");
+}
+
+// Detect if we're on a mobile device (based on screen width)
+function isMobileView() {
+  return window.innerWidth < 576;
+}
+
 // Date and Time Display and Calendar update
 function updateDateTime() {
   const now = new Date();
@@ -93,12 +157,24 @@ setInterval(updateDateTime, 1000);
 // Add custom CSS for styling
 addCustomCSS();
 
+// Create the mobile action modal
+createMobileActionModal();
+
 // Modal functions
 function closeAllModals() {
-  const modals = [modal_new, modal_add, modal_delete, modal_edit, modal_change];
+  const modals = [
+    modal_new,
+    modal_add,
+    modal_delete,
+    modal_edit,
+    modal_change,
+    document.querySelector(".modal-mobile-actions"),
+  ];
+
   modals.forEach((modal) => {
     if (modal) modal.classList.add("hidden");
   });
+
   overlay.classList.remove("active");
 }
 
@@ -162,8 +238,8 @@ function addTask() {
           <span class="task-text">${task}</span>
         </div>
         <div class="create-time">${timeString}</div>
-        <div><button class="delete">delete</button></div>
-        <div><button class="edit">edit</button></div>
+        <div><button class="delete">Delete</button></div>
+        <div><button class="edit">Edit</button></div>
       </div>
     `;
 
@@ -173,6 +249,12 @@ function addTask() {
 
     // Add event listeners to the new task's delete and edit buttons
     setupTaskButtons(li);
+
+    // Add swipe functionality for mobile view
+    setupSwipeActions(li);
+
+    // Add task tap functionality for mobile
+    setupTaskTapAction(li);
 
     // Update task counter
     updateTaskCounter();
@@ -205,9 +287,21 @@ function applyCircularCheckboxStyle(checkbox) {
 
       // Create a checkmark using ::after pseudo-element with JS
       this.style.setProperty("--checkmark-display", "block");
+
+      // Add completed class to task text
+      const taskText = this.closest(".tasks").querySelector(".task-text");
+      taskText.classList.add("completed");
+      taskText.style.textDecoration = "line-through";
+      taskText.style.opacity = "0.6";
     } else {
       this.style.backgroundColor = "white";
       this.style.setProperty("--checkmark-display", "none");
+
+      // Remove completed class from task text
+      const taskText = this.closest(".tasks").querySelector(".task-text");
+      taskText.classList.remove("completed");
+      taskText.style.textDecoration = "none";
+      taskText.style.opacity = "1";
     }
 
     // Update task counter
@@ -230,11 +324,91 @@ modal_ok_btn.addEventListener("click", function () {
   closeAllModals();
 });
 
+// Setup task tap action for mobile view
+function setupTaskTapAction(taskElement) {
+  const taskDiv = taskElement.querySelector(".tasks");
+  const taskText = taskDiv.querySelector(".task-text");
+
+  taskDiv.addEventListener("click", function (e) {
+    // Only trigger if it's a mobile view and the checkbox was not clicked
+    if (isMobileView() && !e.target.classList.contains("circular-checkbox")) {
+      // Prevent checkbox from being clicked
+      if (e.target.closest(".check")) {
+        return;
+      }
+
+      e.stopPropagation();
+
+      // Get the task text and store reference to current task
+      const taskTextContent = taskText.textContent;
+      window.currentTaskToEdit = taskText;
+      window.currentTaskElement = taskElement;
+
+      // Update and open the mobile actions modal
+      const mobileActionsModal = document.querySelector(
+        ".modal-mobile-actions"
+      );
+      const taskNameDisplay =
+        mobileActionsModal.querySelector(".task-name-display");
+      taskNameDisplay.textContent = taskTextContent;
+
+      openModal(mobileActionsModal);
+    }
+  });
+}
+
+// Setup swipe functionality for mobile view
+function setupSwipeActions(taskElement) {
+  const tasksContainer = taskElement.querySelector(".tasks-container");
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  tasksContainer.addEventListener(
+    "touchstart",
+    function (e) {
+      touchStartX = e.changedTouches[0].screenX;
+    },
+    { passive: true }
+  );
+
+  tasksContainer.addEventListener(
+    "touchend",
+    function (e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    },
+    { passive: true }
+  );
+
+  function handleSwipe() {
+    const swipeThreshold = 70; // Minimum distance to be considered a swipe
+
+    if (touchEndX < touchStartX - swipeThreshold) {
+      // Swiped left - show delete action
+      if (isMobileView()) {
+        window.currentTaskElement = taskElement;
+        window.currentTaskToDelete = taskElement;
+        openModal(modal_delete);
+      }
+    } else if (touchEndX > touchStartX + swipeThreshold) {
+      // Swiped right - show edit action
+      if (isMobileView()) {
+        const taskText = taskElement.querySelector(".task-text");
+        window.currentTaskToEdit = taskText;
+        input_edit.value = taskText.textContent;
+        openModal(modal_edit);
+        input_edit.focus();
+      }
+    }
+  }
+}
+
 // Setup task buttons (edit and delete) for a task
 function setupTaskButtons(taskElement) {
   const deleteBtn = taskElement.querySelector(".delete");
   const editBtn = taskElement.querySelector(".edit");
   const checkbox = taskElement.querySelector("input[type='checkbox']");
+  const taskText = taskElement.querySelector(".task-text");
 
   // Apply circular style to checkbox
   applyCircularCheckboxStyle(checkbox);
@@ -248,11 +422,10 @@ function setupTaskButtons(taskElement) {
 
   // Edit button
   editBtn.addEventListener("click", function () {
-    const taskTextElement = taskElement.querySelector(".task-text");
-    const currentText = taskTextElement.textContent;
+    const currentText = taskText.textContent;
 
     // Store reference to the current task for editing
-    window.currentTaskToEdit = taskTextElement;
+    window.currentTaskToEdit = taskText;
 
     // Set the edit input value to current text
     input_edit.value = currentText;
@@ -262,18 +435,25 @@ function setupTaskButtons(taskElement) {
 
   // Checkbox
   checkbox.addEventListener("change", function () {
-    const taskTextElement = taskElement.querySelector(".task-text");
     if (this.checked) {
-      taskTextElement.style.textDecoration = "line-through";
-      taskTextElement.style.opacity = "0.6";
+      taskText.classList.add("completed");
+      taskText.style.textDecoration = "line-through";
+      taskText.style.opacity = "0.6";
     } else {
-      taskTextElement.style.textDecoration = "none";
-      taskTextElement.style.opacity = "1";
+      taskText.classList.remove("completed");
+      taskText.style.textDecoration = "none";
+      taskText.style.opacity = "1";
     }
 
     // Update task counter
     updateTaskCounter();
   });
+
+  // Setup tap action for mobile view
+  setupTaskTapAction(taskElement);
+
+  // Setup swipe functionality for mobile
+  setupSwipeActions(taskElement);
 }
 
 // Confirm deletion
@@ -304,6 +484,13 @@ function confirmEdit() {
 
   if (newText && window.currentTaskToEdit) {
     window.currentTaskToEdit.textContent = newText;
+
+    // If we're in mobile view, also update the task name in the mobile actions modal
+    const taskNameDisplay = document.querySelector(".task-name-display");
+    if (taskNameDisplay) {
+      taskNameDisplay.textContent = newText;
+    }
+
     window.currentTaskToEdit = null;
     closeAllModals();
   } else if (!newText) {
@@ -316,6 +503,41 @@ function confirmEdit() {
 overlay.addEventListener("click", function () {
   closeAllModals();
 });
+
+// Window resize event listener to handle mobile/desktop view transitions
+window.addEventListener("resize", function () {
+  const taskElements = list_container.querySelectorAll("li");
+  // Nothing specific needed here for now, but could be used for future enhancements
+});
+
+// Add double tap to mark as complete
+function setupDoubleTapComplete() {
+  let lastTap = 0;
+
+  list_container.addEventListener("touchend", function (e) {
+    const taskText = e.target.closest(".task-text");
+    if (!taskText) return;
+
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+
+    if (tapLength < 300 && tapLength > 0) {
+      // Double tap detected
+      const checkbox = taskText
+        .closest(".tasks")
+        .querySelector("input[type='checkbox']");
+      checkbox.checked = !checkbox.checked;
+
+      // Trigger the change event manually
+      const event = new Event("change");
+      checkbox.dispatchEvent(event);
+
+      e.preventDefault();
+    }
+
+    lastTap = currentTime;
+  });
+}
 
 // Load saved tasks from localStorage (if any)
 function loadTasks() {
@@ -351,14 +573,61 @@ function addCustomCSS() {
       color: white;
       font-size: 14px;
     }
+    
+    /* Add ripple effect for task click on mobile */
+    @keyframes ripple {
+      0% {
+        transform: scale(0.8);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+    
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      transform: scale(0);
+      animation: ripple 0.6s ease-out;
+    }
+    
+    /* Add hint for mobile users */
+    .mobile-hint {
+      display: none;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    @media (max-width: 575px) {
+      .mobile-hint {
+        display: block;
+      }
+    }
   `;
   document.head.appendChild(styleElement);
+
+  // Add mobile hint text
+  const mobileHint = document.createElement("div");
+  mobileHint.className = "mobile-hint";
+  mobileHint.textContent =
+    "Tap a task to edit or delete • Swipe left/right for quick actions";
+
+  const h1Element = document.querySelector("h1");
+  h1Element.after(mobileHint);
 }
 
 // Save tasks to localStorage
 function saveTasks() {
   localStorage.setItem("todoTasks", list_container.innerHTML);
 }
+
+// Setup double tap to mark tasks as complete
+setupDoubleTapComplete();
 
 // Add event listener to save tasks whenever a change is made
 const observer = new MutationObserver(saveTasks);
