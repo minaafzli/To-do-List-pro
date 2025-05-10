@@ -7,149 +7,133 @@
     <title>To-do-List</title>
   </head>
   <body>
-    <main>
-      <div class="container">
-        <div class="todays-info">
-          <div class="current-date">tue jan 2022</div>
-          <div class="current-time">1:06:15 PM</div>
-        </div>
-        <h2>To-do List</h2>
-        <div class="middle-box">
-          <div class="new-task">
-            <p id="big-btn">+ add a new task</p>
-            <p id="small-btn">+</p>
-          </div>
-
-          <div class="calender">
-            <div class="week-days" , id="today">
-              <div class="day-of-week">s</div>
-              <div class="date">24</div>
-            </div>
-            <div class="week-days">
-              <div class="day-of-week">m</div>
-              <div class="date">25</div>
-            </div>
-            <div class="week-days">
-              <div class="day-of-week">t</div>
-              <div class="date">26</div>
-            </div>
-            <div class="week-days">
-              <div class="day-of-week">w</div>
-              <div class="date">27</div>
-            </div>
-            <div class="week-days">
-              <div class="day-of-week">t</div>
-              <div class="date">28</div>
-            </div>
-            <div class="week-days">
-              <div class="day-of-week">f</div>
-              <div class="date">29</div>
-            </div>
-            <div class="week-days">
-              <div class="day-of-week">s</div>
-              <div class="date">30</div>
-            </div>
-          </div>
-        </div>
-        <h1>tasks</h1>
-
-        <div class="tasks-box">
-          <div class="tasks-container">
-            <div class="tasks">
-              <div class="check"><input type="checkbox" /></div>
-              finish this project
-            </div>
-            <div class="create-time">9:00 am</div>
-
-            <div><button class="delete">delete</button></div>
-            <div><button class="edit">edit</button></div>
-          </div>
-          <div class="tasks-container">
-            <div class="tasks">
-              <div class="check"><input type="checkbox" /></div>
-              finish this project
-            </div>
-
-            <div class="create-time">9:00 am</div>
-
-            <div><button class="delete">delete</button></div>
-            <div><button class="edit">edit</button></div>
-          </div>
-          <div class="tasks-container">
-            <div class="tasks">
-              <div class="check"><input type="checkbox" /></div>
-              finish this project
-            </div>
-
-            <div class="create-time">9:00 am</div>
-
-            <div><button class="delete">delete</button></div>
-            <div><button class="edit">edit</button></div>
-          </div>
+    <div class="container">
+      <div class="todays-info">
+        <div class="current-date">tue jan 2022</div>
+        <div class="current-time">1:06:15 PM</div>
+      </div>
+      <h2>To-do List</h2>
+      <div class="middle-box">
+        <div class="new-task">
+          <p id="big-btn">+ add a new task</p>
+          <p id="small-btn">+</p>
         </div>
 
-        <div class="modal-change hidden">
-          <button class="modal-close">&times;</button>
-          <div class="modalbox">
-            <p>name of task</p>
-            <div class="modal-buttoms">
-              <div><button class="modal-delete-btn">Delete</button></div>
-              <div><button class="modal-edit-btn">Edit</button></div>
-              <div><button class="modal-cancle-btn">cancle</button></div>
-            </div>
+        <div class="calender">
+          <div class="week-days" , id="today">
+            <div class="day-of-week">s</div>
+            <div class="date">24</div>
           </div>
-        </div>
-        <div class="modal-new hidden">
-          <button class="modal-close">&times;</button>
-          <div class="modalbox">
-            <p>Enter new Task...</p>
-            <div class="modal-buttoms">
-              <input
-                type="text"
-                placeholder="enter new name..."
-                class="input-new"
-              />
-              <button class="modal-ok-btn-add">Add</button>
-            </div>
+          <div class="week-days">
+            <div class="day-of-week">m</div>
+            <div class="date">25</div>
           </div>
-        </div>
-
-        <div class="modal-add hidden">
-          <button class="modal-close">&times;</button>
-          <div class="modalbox">
-            <p>Please write down a task first!</p>
-            <div class="modal-buttoms">
-              <button class="modal-ok-btn">OK</button>
-            </div>
+          <div class="week-days">
+            <div class="day-of-week">t</div>
+            <div class="date">26</div>
           </div>
-        </div>
-
-        <div class="modal-delete hidden">
-          <button class="modal-close">&times;</button>
-          <div class="modalbox">
-            <p>Are you sure you want DELETE this task?</p>
-            <div class="modal-buttoms">
-              <button class="modal-delete-btn">Delete</button>
-              <button class="modal-cancle-btn">Cancel</button>
-            </div>
+          <div class="week-days">
+            <div class="day-of-week">w</div>
+            <div class="date">27</div>
           </div>
-        </div>
-
-        <div class="modal-edit hidden">
-          <button class="modal-close">&times;</button>
-          <div class="modalbox">
-            <p>Edit your task...</p>
-            <div class="modal-buttoms">
-              <input
-                type="text"
-                placeholder="enter new name..."
-                class="input-edit"
-              />
-              <button class="modal-ok-btn-edit">OK</button>
-            </div>
+          <div class="week-days">
+            <div class="day-of-week">t</div>
+            <div class="date">28</div>
+          </div>
+          <div class="week-days">
+            <div class="day-of-week">f</div>
+            <div class="date">29</div>
+          </div>
+          <div class="week-days">
+            <div class="day-of-week">s</div>
+            <div class="date">30</div>
           </div>
         </div>
       </div>
-    </main>
+      <h1>tasks</h1>
+
+      <div class="tasks-box">
+        <ul id="list-container">
+          <!-- <div class="tasks-container">
+            <div class="tasks">
+              <div class="check">
+                <input type="checkbox" />
+              </div>
+              finish this project
+            </div>
+            <div class="create-time">9:00 am</div>
+
+            <div><button class="delete">delete</button></div>
+            <div><button class="edit">edit</button></div>
+          </div> -->
+        </ul>
+      </div>
+
+      <div class="modal-new hidden">
+        <button class="modal-close" data-target="#modal-new">&times;</button>
+        <div class="modalbox">
+          <p>Enter new Task...</p>
+          <div class="modal-buttoms">
+            <input
+              type="text"
+              placeholder="enter new name..."
+              class="input-new"
+            />
+            <button class="modal-ok-btn-add">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-change hidden">
+        <button class="modal-close" data-target="#modal-change">&times;</button>
+        <div class="modalbox">
+          <p>name of task</p>
+          <div class="modal-buttoms">
+            <div><button class="modal-delete-btn">Delete</button></div>
+            <div><button class="modal-edit-btn">Edit</button></div>
+            <div><button class="modal-cancle-btn">cancle</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-add hidden">
+        <button class="modal-close" data-target="#modal-add">&times;</button>
+        <div class="modalbox">
+          <p>Please write down a task first!</p>
+          <div class="modal-buttoms">
+            <button class="modal-ok-btn">OK</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-delete hidden">
+        <button class="modal-close" data-target="#modal-delete">&times;</button>
+        <div class="modalbox">
+          <p>Are you sure you want DELETE this task?</p>
+          <div class="modal-buttoms">
+            <button class="modal-delete-btn">Delete</button>
+            <button class="modal-cancle-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-edit hidden">
+        <button class="modal-close" data-target="#modal-edit">&times;</button>
+        <div class="modalbox">
+          <p>Edit your task...</p>
+          <div class="modal-buttoms">
+            <input
+              type="text"
+              placeholder="enter new name..."
+              class="input-edit"
+            />
+            <button class="modal-ok-btn-edit">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="overlay"></div>
+
+    <script type="text/javascript" src="script.js"></script>
   </body>
 </html>
